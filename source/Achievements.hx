@@ -44,7 +44,7 @@ class Achievements {
             showAchievement(ach, onFinish);
 
             achievementsMap.set(ach, true);
-            achievementStatsMap.set(name, stats);
+            achievementStatsMap.set(ach, stats);
             FlxG.save.data.achievementsMap = achievementsMap;
             FlxG.save.flush();
 
@@ -72,7 +72,7 @@ class Achievements {
         var where = FlxG.state.subState != null ? FlxG.state.subState : FlxG.state;
 
         var achBG:FlxSprite = new FlxSprite(60, 50).makeGraphic(420, 120, FlxColor.BLACK);
-        sprGroup.add(bg);
+        sprGroup.add(achBG);
 
         var achIcon:FlxSprite = new FlxSprite(achBG.x + 10, achBG.y + 10); // placeholder for now
         achIcon.makeGraphic(Std.int(150 * (2 / 3)), 150, FlxColor.YELLOW);
