@@ -33,7 +33,7 @@ class Achievements {
 
 			    for (achievement in achievementsFound) {
                     achievements.push(achievement.trim());
-				    Json.parse(File.getContent(Paths.json('achievements/' + achievement)));
+				    Json.parse(File.getContent(Paths.json('achievements/' + achievement.trim())));
                     trace("achievement " + achievement + " loaded");
 			    }
 		    }

@@ -14,8 +14,6 @@ class AchievementsState extends FlxState {
 	override function create() {
 		super.create();
 
-		persistentUpdate = true;
-
 		camFollow = new FlxObject(80, 0, 0, 0);
 		camFollow.screenCenter(X);
 
