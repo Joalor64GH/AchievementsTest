@@ -28,16 +28,7 @@ class PlayState extends FlxState
 		} else if (FlxG.keys.justPressed.F)
 			Achievements.forget('example');
 
-		if (FlxG.keys.justPressed.H) {
-			Achievements.unlock('hello', {
-				date: Date.now()
-			}, () -> {
-				trace("finished showing achievement");
-			});
-		} else if (FlxG.keys.justPressed.B)
-			Achievements.forget('hello');
-
-		// if (FlxG.keys.justPressed.A)
-			// FlxG.switchState(new AchievementsState());
+		if (FlxG.keys.justPressed.A)
+			FlxG.switchState(new AchievementsState());
 	}
 }
