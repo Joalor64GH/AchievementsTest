@@ -2,7 +2,7 @@ package;
 
 import Achievements;
 
-class AchievementState extends FlxState {
+class AchievementsState extends FlxState {
     var achievementArray:Array<AchievementData> = [];
 	var achievementGrp:FlxTypedGroup<FlxText>;
 	var iconArray:Array<AchievementIcon> = [];
