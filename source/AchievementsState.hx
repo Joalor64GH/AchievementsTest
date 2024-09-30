@@ -1,0 +1,106 @@
+package;
+
+import Achievements;
+
+class AchievementState extends FlxState {
+    var achievementArray:Array<AchievementData> = [];
+	var achievementGrp:FlxTypedGroup<FlxText>;
+	var iconArray:Array<AchievementIcon> = [];
+	var description:FlxText;
+	var curSelected:Int = 0;
+
+	var camFollow:FlxObject;
+
+	override function create() {
+		super.create();
+
+		persistentUpdate = true;
+
+		camFollow = new FlxObject(80, 0, 0, 0);
+		camFollow.screenCenter(X);
+
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.GRAY);
+		bg.scrollFactor.set();
+		bg.screenCenter();
+		add(bg);
+
+		achievementGrp = new FlxTypedGroup<FlxText>();
+		add(achievementGrp);
+
+        Achievements.load();
+
+		for (i in 0...Achievements.achievements.length) {
+            var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + Achievements.achievements[i])));
+            if (!coolAchieve.hidden || Achievements.achievementsMap.exists(coolAchieve))
+                achievementArray.push(coolAchieve);
+            
+            var nameTxt:String = Achievements.achievementsMap.exists(coolAchieve) ? coolAchieve.name : '???';
+			var text:FlxText = new FlxText(20, 60 + (i * 60), nameTxt, 32);
+			text.setFormat(Paths.font('vcr.ttf'), 60, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			text.ID = i;
+			achievementGrp.add(text);
+
+			var icon:AchievementIcon = new AchievementIcon(0, 0);
+			icon.sprTracker = text;
+			iconArray.push(icon);
+			add(icon);
+		}
+
+		description = new FlxText(0, FlxG.height * 0.1, FlxG.width * 0.9, '', 28);
+		description.setFormat(Paths.font("vcr.ttf"), 28, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		description.screenCenter(X);
+		description.scrollFactor.set();
+		add(description);
+
+		changeSelection();
+
+		FlxG.camera.follow(camFollow, LOCKON, 0.25);
+	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+
+		if (FlxG.keys.justPressed.UP || FlxG.keys.justPressed.DOWN)
+			changeSelection(FlxG.keys.justPressed.UP ? -1 : 1);
+
+		if (FlxG.keys.justPressed.ESCAPE)
+			FlxState.switchState(new MenuState());
+	}
+
+	function changeSelection(change:Int = 0) {
+		curSelected = FlxMath.wrap(curSelected + change, 0, achievementArray.length - 1);
+
+		achievementGrp.forEach(function(txt:FlxText) {
+			if (txt.ID == curSelected)
+				camFollow.y = txt.y;
+		});
+
+		if (achievementArray[curSelected].desc != null || achievementArray[curSelected].hint != null) {
+			description.text = Achievements.isUnlocked(achievementArray[curSelected]) ? 
+                achievementArray[curSelected].desc + '\nHint: ' + achievementArray[curSelected].hint : 
+                    'This achievement has not been unlocked yet!' + '\nHint: ' + achievementArray[curSelected].hint;
+			description.screenCenter(X);
+		}
+	}
+}
+
+class AchievementIcon extends FlxSprite {
+	public var sprTracker:FlxSprite;
+
+	public function new(x:Float, y:Float) {
+		super(x, y);
+
+		makeGraphic(150, 150, FlxColor.fromRGB(FlxG.random.int(0, 255), FlxG.random.int(0, 255), FlxG.random.int(0, 255)));
+		scrollFactor.set();
+		updateHitbox();
+	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+
+		if (sprTracker != null) {
+			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y);
+			scrollFactor.set(sprTracker.scrollFactor.x, sprTracker.scrollFactor.y);
+		}
+	}
+}

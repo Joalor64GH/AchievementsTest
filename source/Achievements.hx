@@ -4,7 +4,6 @@ typedef AchievementData = {
     public var name:String;
     public var desc:String;
     public var hint:String;
-    public var save_tag:String;
     public var hidden:Bool;
 }
 
@@ -75,7 +74,7 @@ class Achievements {
         sprGroup.add(achBG);
 
         var achIcon:FlxSprite = new FlxSprite(achBG.x + 10, achBG.y + 10); // placeholder for now
-        achIcon.makeGraphic(Std.int(150 * (2 / 3)), 150, FlxColor.YELLOW);
+        achIcon.makeGraphic(150, 150, FlxColor.YELLOW);
         sprGroup.add(achIcon);
 
         var achName:FlxText = new FlxText(achIcon.x + achIcon.width + 20, achIcon.y + 16, 280, coolAchieve.name, 16);
