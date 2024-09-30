@@ -26,16 +26,20 @@ class Achievements {
         FlxG.save.flush();
 
         var path:String = Paths.txt('achievements/achList');
-        if (FileSystem.exists(path)) {
-			var listContent:String = File.getContent(path);
-			var achievementsFound:Array<String> = listContent.split('\n');
+        try {
+            if (FileSystem.exists(path)) {
+			    var listContent:String = File.getContent(path);
+			    var achievementsFound:Array<String> = listContent.split('\n');
 
-			for (achievement in achievementsFound) {
-                achievements.push(achievement.trim());
-				Json.parse(File.getContent(Paths.json('achievements/' + achievement)));
-                trace("achievement " + achievement + " loaded");
-			}
-		}
+			    for (achievement in achievementsFound) {
+                    achievements.push(achievement.trim());
+				    Json.parse(File.getContent(Paths.json('achievements/' + achievement)));
+                    trace("achievement " + achievement + " loaded");
+			    }
+		    }
+        } catch (e:Dynamic) {
+            trace(e);
+        }
     }
 
     public static function unlock(ach:String, stats:AchievementStats, onFinish:Void->Void) {
