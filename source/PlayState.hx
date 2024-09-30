@@ -37,7 +37,7 @@ class PlayState extends FlxState
 		} else if (FlxG.keys.justPressed.B)
 			Achievements.forget('hello');
 
-		if (FlxG.keys.justPressed.A)
-			FlxG.switchState(new AchievementsState());
+		// if (FlxG.keys.justPressed.A)
+			// FlxG.switchState(new AchievementsState());
 	}
 }
