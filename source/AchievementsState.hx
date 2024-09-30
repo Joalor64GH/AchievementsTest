@@ -31,10 +31,10 @@ class AchievementsState extends FlxState {
 
 		for (i in 0...Achievements.achievements.length) {
             var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + Achievements.achievements[i])));
-            if (!coolAchieve.hidden || Achievements.achievementsMap.exists(coolAchieve))
+            if (!coolAchieve.hidden || Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase()))
                 achievementArray.push(coolAchieve);
             
-            var nameTxt:String = Achievements.achievementsMap.exists(coolAchieve) ? coolAchieve.name : '???';
+            var nameTxt:String = Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase()) ? coolAchieve.name : '???';
 			var text:FlxText = new FlxText(20, 60 + (i * 60), nameTxt, 32);
 			text.setFormat(Paths.font('vcr.ttf'), 60, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			text.ID = i;
@@ -64,7 +64,7 @@ class AchievementsState extends FlxState {
 			changeSelection(FlxG.keys.justPressed.UP ? -1 : 1);
 
 		if (FlxG.keys.justPressed.ESCAPE)
-			FlxState.switchState(new MenuState());
+			FlxG.switchState(new PlayState());
 	}
 
 	function changeSelection(change:Int = 0) {
@@ -76,7 +76,7 @@ class AchievementsState extends FlxState {
 		});
 
 		if (achievementArray[curSelected].desc != null || achievementArray[curSelected].hint != null) {
-			description.text = Achievements.isUnlocked(achievementArray[curSelected]) ? 
+			description.text = Achievements.isUnlocked(achievementArray[curSelected].name) ? 
                 achievementArray[curSelected].desc + '\nHint: ' + achievementArray[curSelected].hint : 
                     'This achievement has not been unlocked yet!' + '\nHint: ' + achievementArray[curSelected].hint;
 			description.screenCenter(X);
