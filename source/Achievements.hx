@@ -66,46 +66,44 @@ class Achievements {
         }
     }
 
-    public function showAchievement(ach:String, onFinish:Void->Void) {
+    public static function showAchievement(ach:String, onFinish:Void->Void) {
+        var sprGroup:FlxSpriteGroup = new FlxSpriteGroup();
         var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + ach)));
+        var where = FlxG.state.subState != null ? FlxG.state.subState : FlxG.state;
 
         var achBG:FlxSprite = new FlxSprite(60, 50).makeGraphic(420, 120, FlxColor.BLACK);
-        achBG.alpha = 0;
-        add(bg);
+        sprGroup.add(bg);
 
         var achIcon:FlxSprite = new FlxSprite(achBG.x + 10, achBG.y + 10); // placeholder for now
         achIcon.makeGraphic(Std.int(150 * (2 / 3)), 150, FlxColor.YELLOW);
-        achIcon.alpha = 0;
-        add(achIcon);
+        sprGroup.add(achIcon);
 
         var achName:FlxText = new FlxText(achIcon.x + achIcon.width + 20, achIcon.y + 16, 280, coolAchieve.name, 16);
 		achName.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
-        achName.alpha = 0;
-        add(achName);
+        sprGroup.add(achName);
 
 		var achTxt:FlxText = new FlxText(achName.x, achName.y + 32, 280, coolAchieve.desc, 16);
 		achTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
-        achTxt.alpha = 0;
-		add(achTxt);
+		sprGroup.add(achTxt);
 
-        FlxTween.tween(achBG, {alpha: 0.65}, 1, {ease: FlxEase.quadOut});
-        FlxTween.tween(achIcon, {alpha: 1}, 1, {ease: FlxEase.quadOut});
-        FlxTween.tween(achName, {alpha: 1}, 1, {ease: FlxEase.quadOut});
-        FlxTween.tween(achTxt, {alpha: 1}, 1, {ease: FlxEase.quadOut});
+        var flash = new FlxSprite().makeGraphic(Std.int(sprGroup.width), Std.int(sprGroup.height), FlxColor.WHITE);
+		sprGroup.add(flash);
+
+        where.add(sprGroup);
+
+        FlxTween.tween(flash, {alpha: 0}, 0.65, {
+			onComplete: (twn:FlxTween) -> {
+				sprGroup.remove(flash);
+			}
+		});
 
         new FlxTimer().start(2.5, function(tmr:FlxTimer) {
-            FlxTween.tween(achBG, {alpha: 0}, 1, {ease: FlxEase.quadOut, onComplete: (twn:FlxTween) -> {
-                achBG.kill();
-            }});
-            FlxTween.tween(achIcon, {alpha: 0}, 1, {ease: FlxEase.quadOut, onComplete: (twn:FlxTween) -> {
-                achIcon.kill();
-            }});
-            FlxTween.tween(achName, {alpha: 0}, 1, {ease: FlxEase.quadOut, onComplete: (twn:FlxTween) -> {
-                achName.kill();
-            }});
-            FlxTween.tween(achTxt, {alpha: 0}, 1, {ease: FlxEase.quadOut, onComplete: (twn:FlxTween) -> {
-                achTxt.kill();
-            }});
+            FlxTween.tween(sprGroup, {alpha: 0}, 1, {
+			    onComplete: function(twn:FlxTween)  {
+				    sprGroup.kill();
+				    sprGroup.destroy();
+			    }
+		    });
 
             if (onFinish != null)
                 onFinish();
