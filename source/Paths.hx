@@ -9,8 +9,6 @@ import flixel.graphics.frames.FlxAtlasFrames;
 
 class Paths
 {
-	inline public static final SOUND_EXT = #if !html5 "ogg" #else "mp3" #end;
-	inline public static final VIDEO_EXT = "mp4";
 	inline public static final DEFAULT_FOLDER:String = 'assets';
 
 	static public function getPath(folder:Null<String>, file:String)
@@ -29,46 +27,44 @@ class Paths
 		return getPath(null, file);
 	}
 
+	inline public static function getText(path:String):Array<String>
+		return Assets.exists(path) ? [for (i in Assets.getText(path).trim().split('\n')) i.trim()] : [];
+
 	inline static public function txt(key:String)
 	{
-		return file('data/$key.txt');
+		return file('$key.txt');
 	}
 
 	inline static public function xml(key:String)
 	{
-		return file('data/$key.xml');
+		return file('$key.xml');
 	}
 
 	inline static public function json(key:String)
 	{
-		return file('data/$key.json');
+		return file('$key.json');
 	}
 
 	#if yaml
 	inline static public function yaml(key:String)
 	{
-		return file('data/$key.yaml');
+		return file('$key.yaml');
 	}
 	#end
 
-	inline static public function video(key:String)
-	{
-		return file('videos/$key.$VIDEO_EXT');
-	}
-
 	inline static public function sound(key:String)
 	{
-		return file('sounds/$key.$SOUND_EXT');
+		return file('sounds/$key.ogg');
 	}
 
 	inline static public function soundRandom(key:String, min:Int, max:Int)
 	{
-		return file('sounds/$key${FlxG.random.int(min, max)}.$SOUND_EXT');
+		return file('sounds/$key${FlxG.random.int(min, max)}.ogg');
 	}
 
 	inline static public function music(key:String)
 	{
-		return file('music/$key.$SOUND_EXT');
+		return file('music/$key.ogg');
 	}
 
 	inline static public function image(key:String)
