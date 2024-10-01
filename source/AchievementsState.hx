@@ -17,9 +17,6 @@ class AchievementsState extends FlxState {
 		camFollow = new FlxObject(80, 0, 0, 0);
 		camFollow.screenCenter(X);
 
-    	iconArray = [];
-    	achievementArray = [];
-
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.GRAY);
 		bg.scrollFactor.set();
 		bg.screenCenter();
@@ -91,7 +88,10 @@ class AchievementIcon extends FlxSprite {
 	public function new(x:Float, y:Float, ach:String) {
 		super(x, y);
 
-		loadGraphic(Paths.image('achievements/' + Achievements.isUnlocked(ach)) ? ach : 'locked');
+		if (Achievements.isUnlocked(ach))
+			loadGraphic(Paths.image('achievements/' + ach));
+		else
+			loadGraphic(Paths.image('achievements/locked'));
 		setGraphicSize(75, 75);
 		scrollFactor.set();
 		updateHitbox();
