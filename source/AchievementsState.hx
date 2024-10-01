@@ -91,8 +91,7 @@ class AchievementIcon extends FlxSprite {
 	public function new(x:Float, y:Float, ach:String) {
 		super(x, y);
 
-		var graphicToLoad:String = (Achievements.isUnlocked(ach)) ? ach : 'lockedAchievement';
-		loadGraphic(Paths.image('achievements/' + graphicToLoad));
+		loadGraphic(Paths.image('achievements/' + Achievements.isUnlocked(ach)) ? ach : 'locked');
 		setGraphicSize(75, 75);
 		scrollFactor.set();
 		updateHitbox();
