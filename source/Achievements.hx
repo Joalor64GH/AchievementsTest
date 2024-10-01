@@ -72,13 +72,12 @@ class Achievements {
     public static function showAchievement(ach:String, onFinish:Void->Void) {
         var sprGroup:FlxSpriteGroup = new FlxSpriteGroup();
         var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + ach)));
-        var where = FlxG.state.subState != null ? FlxG.state.subState : FlxG.state;
 
         var achBG:FlxSprite = new FlxSprite(60, 50).makeGraphic(420, 120, FlxColor.BLACK);
         sprGroup.add(achBG);
 
         var achIcon:FlxSprite = new FlxSprite(achBG.x + 10, achBG.y + 10); // placeholder for now
-        achIcon.makeGraphic(150, 150, FlxColor.YELLOW);
+        achIcon.makeGraphic(150, Std.int(150 * (2 / 3)), FlxColor.fromRGB(FlxG.random.int(0, 255), FlxG.random.int(0, 255), FlxG.random.int(0, 255)));
         sprGroup.add(achIcon);
 
         var achName:FlxText = new FlxText(achIcon.x + achIcon.width + 20, achIcon.y + 16, 280, coolAchieve.name, 16);
@@ -89,9 +88,10 @@ class Achievements {
 		achTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
 		sprGroup.add(achTxt);
 
-        var flash = new FlxSprite().makeGraphic(Std.int(sprGroup.width), Std.int(sprGroup.height), FlxColor.WHITE);
+        var flash = new FlxSprite(60, 50).makeGraphic(420, 120, FlxColor.WHITE);
 		sprGroup.add(flash);
 
+        var where = FlxG.state.subState != null ? FlxG.state.subState : FlxG.state;
         where.add(sprGroup);
 
         FlxTween.tween(flash, {alpha: 0}, 0.65, {

@@ -32,8 +32,7 @@ class AchievementsState extends FlxState {
             if (!coolAchieve.hidden || Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase()))
                 achievementArray.push(coolAchieve);
             
-            var nameTxt:String = Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase()) ? coolAchieve.name : '???';
-			var text:FlxText = new FlxText(20, 60 + (i * 60), nameTxt, 32);
+			var text:FlxText = new FlxText(20, 60 + (i * 60), Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase()) ? coolAchieve.name : '???', 32);
 			text.setFormat(Paths.font('vcr.ttf'), 60, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			text.ID = i;
 			achievementGrp.add(text);
@@ -68,13 +67,16 @@ class AchievementsState extends FlxState {
 	function changeSelection(change:Int = 0) {
 		curSelected = FlxMath.wrap(curSelected + change, 0, achievementArray.length - 1);
 
+		for (i in 0...achievementArray.length)
+			achievementArray[i].alpha = (i == curSelected) ? 1 : 0.6;
+
 		achievementGrp.forEach(function(txt:FlxText) {
 			if (txt.ID == curSelected)
 				camFollow.y = txt.y;
 		});
 
 		if (achievementArray[curSelected].desc != null || achievementArray[curSelected].hint != null) {
-			description.text = Achievements.isUnlocked(achievementArray[curSelected].name) ? 
+			description.text = Achievements.isUnlocked(achievementArray[curSelected].name.toLowerCase()) ? 
                 achievementArray[curSelected].desc + '\nHint: ' + achievementArray[curSelected].hint : 
                     'This achievement has not been unlocked yet!' + '\nHint: ' + achievementArray[curSelected].hint;
 			description.screenCenter(X);
