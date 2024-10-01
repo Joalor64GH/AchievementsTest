@@ -17,6 +17,10 @@ class AchievementsState extends FlxState {
 		camFollow = new FlxObject(80, 0, 0, 0);
 		camFollow.screenCenter(X);
 
+		achievementGrp.clear();
+    iconArray = [];
+    achievementArray = [];
+
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.GRAY);
 		bg.scrollFactor.set();
 		bg.screenCenter();
