@@ -67,10 +67,8 @@ class AchievementsState extends FlxState {
 	function changeSelection(change:Int = 0) {
 		curSelected = FlxMath.wrap(curSelected + change, 0, achievementArray.length - 1);
 
-		for (i in 0...achievementArray.length)
-			achievementArray[i].alpha = (i == curSelected) ? 1 : 0.6;
-
 		achievementGrp.forEach(function(txt:FlxText) {
+			txt.alpha = (txt.ID == curSelected) ? 1 : 0.6;
 			if (txt.ID == curSelected)
 				camFollow.y = txt.y;
 		});
