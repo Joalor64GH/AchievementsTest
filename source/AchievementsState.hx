@@ -32,7 +32,7 @@ class AchievementsState extends FlxState {
 
 		for (i in 0...Achievements.achievements.length) {
             var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + Achievements.achievements[i])));
-            if (coolAchieve.hidden || Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase()))
+            if (Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase()))
                 achievementArray.push(coolAchieve);
             
 			var text:FlxText = new FlxText(20, 60 + (i * 60), Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase()) ? coolAchieve.name : '???', 32);
@@ -93,7 +93,7 @@ class AchievementIcon extends FlxSprite {
 
 		var graphicToLoad:String = (Achievements.isUnlocked(ach)) ? ach : 'lockedAchievement';
 		loadGraphic(Paths.image('achievements/' + graphicToLoad));
-		makeGraphic(150, 150, FlxColor.fromRGB(FlxG.random.int(0, 255), FlxG.random.int(0, 255), FlxG.random.int(0, 255)));
+		setGraphicSize(75, 75);
 		scrollFactor.set();
 		updateHitbox();
 	}

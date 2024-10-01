@@ -4,7 +4,6 @@ typedef AchievementData = {
     public var name:String;
     public var desc:String;
     public var hint:String;
-    public var hidden:Bool;
 }
 
 typedef AchievementStats = {
@@ -65,6 +64,7 @@ class Achievements {
             achievementStatsMap.remove(ach);
             FlxG.save.data.achievementsMap = achievementsMap;
             FlxG.save.flush();
+            
             trace('achievement $ach removed!');
         }
     }
@@ -74,21 +74,26 @@ class Achievements {
         var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + ach)));
 
         var achBG:FlxSprite = new FlxSprite(60, 50).makeGraphic(420, 120, FlxColor.BLACK);
+        achBG.scrollFactor.set();
         sprGroup.add(achBG);
 
         var achIcon:FlxSprite = new FlxSprite(achBG.x + 10, achBG.y + 10).loadGraphic(Paths.image('achievements/$ach'));
         achIcon.setGraphicSize(Std.int(achIcon.width * (2 / 3)));
+        achIcon.scrollFactor.set();
         sprGroup.add(achIcon);
 
         var achName:FlxText = new FlxText(achIcon.x + achIcon.width + 20, achIcon.y + 16, 280, coolAchieve.name, 16);
 		achName.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
+        achName.scrollFactor.set();
         sprGroup.add(achName);
 
 		var achTxt:FlxText = new FlxText(achName.x, achName.y + 32, 280, coolAchieve.desc, 16);
 		achTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
+        achTxt.scrollFactor.set();
 		sprGroup.add(achTxt);
 
         var flash = new FlxSprite(60, 50).makeGraphic(420, 120, FlxColor.WHITE);
+        flash.scrollFactor.set();
 		sprGroup.add(flash);
 
         var where = FlxG.state.subState != null ? FlxG.state.subState : FlxG.state;
