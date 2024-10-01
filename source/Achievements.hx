@@ -76,8 +76,8 @@ class Achievements {
         var achBG:FlxSprite = new FlxSprite(60, 50).makeGraphic(420, 120, FlxColor.BLACK);
         sprGroup.add(achBG);
 
-        var achIcon:FlxSprite = new FlxSprite(achBG.x + 10, achBG.y + 10); // placeholder for now
-        achIcon.makeGraphic(150, Std.int(150 * (2 / 3)), FlxColor.fromRGB(FlxG.random.int(0, 255), FlxG.random.int(0, 255), FlxG.random.int(0, 255)));
+        var achIcon:FlxSprite = new FlxSprite(achBG.x + 10, achBG.y + 10).loadGraphic(Paths.image('achievements/$ach'));
+        achIcon.setGraphicSize(Std.int(achIcon.width * (2 / 3)));
         sprGroup.add(achIcon);
 
         var achName:FlxText = new FlxText(achIcon.x + achIcon.width + 20, achIcon.y + 16, 280, coolAchieve.name, 16);
