@@ -26,8 +26,6 @@ class AchievementsState extends FlxState {
 		achievementGrp = new FlxTypedGroup<FlxText>();
 		add(achievementGrp);
 
-        Achievements.load();
-
 		for (i in 0...Achievements.achievements.length) {
             var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + Achievements.achievements[i])));
 			achievementArray.push(coolAchieve);
