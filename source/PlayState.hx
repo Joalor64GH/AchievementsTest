@@ -8,8 +8,6 @@ class PlayState extends FlxState
 
 		add(new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.GRAY));
 
-		Achievements.load();
-
 		var text = new FlxText(0, 0, 0, "Hello World", 64);
 		text.screenCenter();
 		add(text);

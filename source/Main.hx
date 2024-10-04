@@ -4,7 +4,7 @@ class Main extends openfl.display.Sprite {
 	public final config:Dynamic = {
 		dimensions: [1280, 720],
 		framerate: 60,
-		initialState: PlayState,
+		initialState: InitialState,
 		skipSplash: false,
 		startFullscreen: false
 	};
