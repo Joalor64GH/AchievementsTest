@@ -28,20 +28,23 @@ class AchievementsState extends FlxState {
         Achievements.load();
 
 		for (i in 0...Achievements.achievements.length) {
-            var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + Achievements.achievements[i])));
-            if (Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase()))
-                achievementArray.push(coolAchieve);
+            var achievementName = Achievements.achievements[i];
+            var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + achievementName)));
             
-			var text:FlxText = new FlxText(20, 60 + (i * 60), Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase()) ? coolAchieve.name : '???', 32);
-			text.setFormat(Paths.font('vcr.ttf'), 60, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			text.ID = i;
-			achievementGrp.add(text);
+            if (coolAchieve != null && Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase())) {
+                achievementArray.push(coolAchieve);
 
-			var icon:AchievementIcon = new AchievementIcon(0, 0, coolAchieve.name.toLowerCase());
-			icon.sprTracker = text;
-			iconArray.push(icon);
-			add(icon);
-		}
+                var text:FlxText = new FlxText(20, 60 + (i * 60), Achievements.isUnlocked(coolAchieve.name.toLowerCase()) ? coolAchieve.name : '???', 32);
+                text.setFormat(Paths.font('vcr.ttf'), 60, FlxColor.WHITE, LEFT);
+                text.ID = i;
+                achievementGrp.add(text);
+
+                var icon:AchievementIcon = new AchievementIcon(0, 0, coolAchieve.name.toLowerCase());
+                icon.sprTracker = text;
+                iconArray.push(icon);
+                add(icon);
+            }
+        }
 
 		description = new FlxText(0, FlxG.height * 0.1, FlxG.width * 0.9, '', 28);
 		description.setFormat(Paths.font("vcr.ttf"), 28, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);

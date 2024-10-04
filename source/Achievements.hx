@@ -12,7 +12,6 @@ typedef AchievementStats = {
 
 class Achievements {
     public static var achievements:Array<String> = [];
-
     public static var achievementsMap:Map<String, Bool> = new Map();
     public static var achievementStatsMap:Map<String, AchievementStats> = new Map();
 
@@ -31,9 +30,17 @@ class Achievements {
 			    var achievementsFound:Array<String> = listContent.split('\n');
 
 			    for (achievement in achievementsFound) {
-                    achievements.push(achievement.trim());
-				    Json.parse(File.getContent(Paths.json('achievements/' + achievement.trim())));
-                    trace("achievement " + achievement + " loaded");
+                    var achievementName = achievement.trim();
+
+                    if (achievementName != "") {
+                        achievements.push(achievementName);
+                        try {
+				            Json.parse(File.getContent(Paths.json('achievements/' + achievementName)));
+                            trace("achievement " + achievement + " loaded");
+                        } catch (e:Dynamic) {
+                            trace("error while loading achievement:" + e);
+                        }
+                    }
 			    }
 		    }
         } catch (e:Dynamic) {
