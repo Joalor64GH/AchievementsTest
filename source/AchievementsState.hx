@@ -6,6 +6,7 @@ class AchievementsState extends FlxState {
     var achievementArray:Array<AchievementData> = [];
 	var achievementGrp:FlxTypedGroup<FlxText>;
 	var iconArray:Array<AchievementIcon> = [];
+	var isUnlocked:Array<Bool> = [];
 	var description:FlxText;
 	var curSelected:Int = 0;
 
@@ -28,22 +29,28 @@ class AchievementsState extends FlxState {
         Achievements.load();
 
 		for (i in 0...Achievements.achievements.length) {
-            var achievementName = Achievements.achievements[i];
-            var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + achievementName)));
-            
-            if (coolAchieve != null && Achievements.achievementsMap.exists(coolAchieve.name.toLowerCase())) {
-                achievementArray.push(coolAchieve);
+            var coolAchieve:AchievementData = cast Json.parse(File.getContent(Paths.json('achievements/' + Achievements.achievements[i])));
+			achievementArray.push(coolAchieve);
 
-                var text:FlxText = new FlxText(20, 60 + (i * 60), Achievements.isUnlocked(coolAchieve.name.toLowerCase()) ? coolAchieve.name : '???', 32);
-                text.setFormat(Paths.font('vcr.ttf'), 60, FlxColor.WHITE, LEFT);
-                text.ID = i;
-                achievementGrp.add(text);
+			var stringToUse:String = coolAchieve.name;
+			var unlocked:Bool = true;
 
-                var icon:AchievementIcon = new AchievementIcon(0, 0, coolAchieve.name.toLowerCase());
-                icon.sprTracker = text;
-                iconArray.push(icon);
-                add(icon);
-            }
+			if (!Achievements.achievementsMap.exists(Achievements.achievements[i])) {
+				stringToUse = "???";
+				unlocked = false;
+			}
+
+			isUnlocked.push(unlocked);
+
+            var text:FlxText = new FlxText(20, 60 + (i * 60), stringToUse, 32);
+            text.setFormat(Paths.font('vcr.ttf'), 60, FlxColor.WHITE, LEFT);
+            text.ID = i;
+            achievementGrp.add(text);
+
+            var icon:AchievementIcon = new AchievementIcon(0, 0, Achievements.achievements[i].trim());
+            icon.sprTracker = text;
+            iconArray.push(icon);
+            add(icon);
         }
 
 		description = new FlxText(0, FlxG.height * 0.1, FlxG.width * 0.9, '', 28);
